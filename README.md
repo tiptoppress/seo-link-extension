@@ -22,24 +22,20 @@ With Term and Category Based Posts Widget version 4.7 or higher we let people do
 Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
 
 ### Features
-* Option to allow HTML in the excerpt
-* Option to override Theme and plugin excerpt lenght filters
-* Option to override Theme and plugin excerpt more filters
-* Option to hide social buttons, banners, shortcodes and more used in the excerpt
-* Option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
+* Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
 
 ## Screenshot
 Adds more options for the excerpt output
 
-![Adds more options for the excerpt output](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-1.PNG?raw=true "Adds more options for the excerpt output")
+![Adds more options for the excerpt output](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.PNG?raw=true "Adds more options for the excerpt output")
 
 Allow HTML in the excerpt
 
-![Allow HTML in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-2.PNG?raw=true "Allow HTML in the excerpt")
+![Allow HTML in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.PNG?raw=true "Allow HTML in the excerpt")
 
 Solves the double rendered shortcode bug in the excerpt
 
-![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/term-posts-excerpt-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
+![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 
 ### Contribute
@@ -55,8 +51,4 @@ While using this plugin if you find any bug or any conflict, please submit an is
 
 ## Changelog
 #### 0.1 - December 17th 2016
-* Add a option to allow HTML in the excerpt
-* Add a option to override Theme and plugin excerpt lenght filters
-* Add a option to override Theme and plugin excerpt more filters
-* Add a option to hide social buttons, banners, shortcodes and more used in the excerpt
-* Add a option to show social buttons, banners, shortcodes and more only once in the outputed excerpt
+* Add a option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
