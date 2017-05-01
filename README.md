@@ -13,7 +13,7 @@ A free extension for the premium widget Term and Category Based Posts Widget ava
 
 
 ## Description
-The Excerpt Extension adds more options for the excerpt output.
+The SEO Extension adds SEO optimization and gather clicks with Google Analytic.
 
 ### Try before buy
 

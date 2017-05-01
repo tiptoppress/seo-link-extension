@@ -11,7 +11,7 @@ A free extension for the premium widget Term and Category Based Posts Widget
 
 == Description ==
 
-The Excerpt Extension adds more options for the excerpt output. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web).
+The SEO Extension adds SEO optimization and gather clicks with Google Analytic. Term and Category Based Posts Widget is available here [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=description_eext&utm_medium=web).
 
 = Try before buy =
 
