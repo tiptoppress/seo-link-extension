@@ -2,7 +2,7 @@
 /*
 Plugin Name: SEO Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
-Description: SEO optimization and gather clicks with Google Analytic with the premium widget Term and Category Based Posts Widget.
+Description: SEO optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
 Version: 0.1
 Author URI: http://tiptoppress.com
