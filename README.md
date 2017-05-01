@@ -1,4 +1,4 @@
-Term and Category Based Posts Excerpt Extension
+Term and Category Based Posts SEO Extension
 ===============================================
 
 A free extension for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
@@ -27,15 +27,15 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 ## Screenshot
 Adds more options for the excerpt output
 
-![Adds more options for the excerpt output](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.PNG?raw=true "Adds more options for the excerpt output")
+![Adds more options for the excerpt output](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.png?raw=true "Adds more options for the excerpt output")
 
 Allow HTML in the excerpt
 
-![Allow HTML in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.PNG?raw=true "Allow HTML in the excerpt")
+![Allow HTML in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.png?raw=true "Allow HTML in the excerpt")
 
 Solves the double rendered shortcode bug in the excerpt
 
-![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.PNG?raw=true "Solves the double rendered shortcode bug in the excerpt")
+![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.png?raw=true "Solves the double rendered shortcode bug in the excerpt")
 
 
 ### Contribute
@@ -50,5 +50,5 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
 
 ## Changelog
-#### 0.1 - December 17th 2016
+#### 0.1 - May 01st 2016
 * Add a option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
