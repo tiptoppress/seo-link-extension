@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: SEO Extension
+Plugin Name: SEO-Link Extension
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: SEO optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
@@ -43,7 +43,7 @@ function search_engine_attribute_filter($html,$instance) {
 	return $html;
 }
 
-add_filter('cpw_search_engine_attribute',__NAMESPACE__.'\search_engine_attribute_filter',10,2);
+add_filter('cpwp_post_url',__NAMESPACE__.'\search_engine_attribute_filter',10,2);
 
 /**
  * Panel "More Excerpt Options"
