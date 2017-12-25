@@ -96,22 +96,24 @@ function form_seo_panel_filter($widget,$instance) {
 
 	?>
 	<h4 data-panel="seo"><?php _e('SEO','categorypostspro')?></h4>
-	<p>
-		<label for="<?php echo $widget->get_field_id("no_links"); ?>">
-			<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("no_links"); ?>" name="<?php echo $widget->get_field_name("no_links"); ?>"<?php checked( (bool) $instance["no_links"], true ); ?> />
-			<?php _e( 'No links','seo-link-extension' ); ?>
-		</label>
-	</p>
-	<p>
-		<label for="<?php echo $widget->get_field_id("search_engine_attribute"); ?>">
-			<?php _e( 'SEO friendly URLs:','seo-link-extension' ); ?>
-			<select id="<?php echo $widget->get_field_id("search_engine_attribute"); ?>" name="<?php echo $widget->get_field_name("search_engine_attribute"); ?>">
-				<option value="none" <?php selected($search_engine_attribute, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-				<option value="canonical" <?php selected($search_engine_attribute, 'canonical')?>><?php _e( 'canonical', 'category-posts' ); ?></option>
-				<option value="nofollow" <?php selected($search_engine_attribute, 'nofollow')?>><?php _e( 'nofollow', 'category-posts' ); ?></option>
-			</select>
-		</label>
-	</p>
+	<div>
+		<p>
+			<label for="<?php echo $widget->get_field_id("no_links"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("no_links"); ?>" name="<?php echo $widget->get_field_name("no_links"); ?>"<?php checked( (bool) $instance["no_links"], true ); ?> />
+				<?php _e( 'No links','seo-link-extension' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id("search_engine_attribute"); ?>">
+				<?php _e( 'SEO friendly URLs:','seo-link-extension' ); ?>
+				<select id="<?php echo $widget->get_field_id("search_engine_attribute"); ?>" name="<?php echo $widget->get_field_name("search_engine_attribute"); ?>">
+					<option value="none" <?php selected($search_engine_attribute, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
+					<option value="canonical" <?php selected($search_engine_attribute, 'canonical')?>><?php _e( 'canonical', 'category-posts' ); ?></option>
+					<option value="nofollow" <?php selected($search_engine_attribute, 'nofollow')?>><?php _e( 'nofollow', 'category-posts' ); ?></option>
+				</select>
+			</label>
+		</p>
+	</div>
 	<?php
 }
 
