@@ -14,6 +14,7 @@ namespace termCategoryPostsPro\seoExtension;
 if ( !defined( 'ABSPATH' ) ) exit;
 
 const TEXTDOMAIN = 'seo-extension';
+const MINBASEVERSION        = "4.7.1";
 
 /**
  * Filter to add rel attribute to all widget links and make other website links more important
@@ -71,6 +72,37 @@ function search_engine_attribute_filter($html,$widget,$instance) {
 
 add_filter('cpwp_post_html',__NAMESPACE__.'\search_engine_attribute_filter',10,3);
 
+
+ /**
+ * Check the Term and Category based Posts Widget version
+ *
+ */
+function version_check() {
+	$min_base_version = explode('.', MINBASEVERSION);
+	$installed_base_version = explode('.', \termcategoryPostsPro\VERSION);
+
+	$ret = ($min_base_version[0] < $installed_base_version[0]) ||
+			($min_base_version[0] == $installed_base_version[0] && $min_base_version[1] <= $installed_base_version[1]);
+	
+	return $ret;
+}
+
+ /**
+ * Write admin notice if a higher version is needed
+ *
+ */
+function version_notice() {
+	if ( ! version_check() ) {
+		?>
+		<div class="update-nag notice">
+			<p><?php printf( __( 'The SEO-Link Extension needs the Term and Category based Posts Wiedget version %s or higher.', 'category-posts' ), MINBASEVERSION ); ?></p>
+		</div>
+		<?php
+	}
+}
+
+add_action( 'admin_notices', __NAMESPACE__.'\version_notice' );
+
 /**
  * Panel "More Excerpt Options"
  *
@@ -83,6 +115,10 @@ add_filter('cpwp_post_html',__NAMESPACE__.'\search_engine_attribute_filter',10,3
  *
  */
 function form_seo_panel_filter($widget,$instance) {
+
+	if ( ! version_check() ) {
+		return;
+	}
 
 	$instance = wp_parse_args( ( array ) $instance, array(	
 		// extension options
