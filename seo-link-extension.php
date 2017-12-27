@@ -77,8 +77,8 @@ add_filter('cpwp_post_html',__NAMESPACE__.'\search_engine_attribute_filter',10,3
  * Check the Term and Category based Posts Widget version
  *
  */
-function version_check() {
-	$min_base_version = explode('.', MINBASEVERSION);
+function version_check( $min_base_version = MINBASEVERSION ) {	
+	$min_base_version = explode('.', $min_base_version);
 	$installed_base_version = explode('.', \termcategoryPostsPro\VERSION);
 
 	$ret = ($min_base_version[0] < $installed_base_version[0]) ||
@@ -95,7 +95,7 @@ function version_notice() {
 	if ( ! version_check() ) {
 		?>
 		<div class="update-nag notice">
-			<p><?php printf( __( 'The SEO-Link Extension needs the Term and Category based Posts Wiedget version %s or higher.', 'category-posts' ), MINBASEVERSION ); ?></p>
+			<p><?php printf( __( 'The SEO-Link Extension needs the Term and Category based Posts Wiedget version %s or higher. It is possible that some features are not available. Please <a href="%s">update</a>.', 'category-posts' ), MINBASEVERSION, admin_url('plugins.php') ); ?></p>
 		</div>
 		<?php
 	}
@@ -116,7 +116,7 @@ add_action( 'admin_notices', __NAMESPACE__.'\version_notice' );
  */
 function form_seo_panel_filter($widget,$instance) {
 
-	if ( ! version_check() ) {
+	if ( ! version_check( "4.7.1" ) ) {
 		return;
 	}
 
@@ -133,12 +133,14 @@ function form_seo_panel_filter($widget,$instance) {
 	?>
 	<h4 data-panel="seo"><?php _e('SEO','categorypostspro')?></h4>
 	<div>
+		<?php if ( version_check( "4.7.1" ) ) : ?>
 		<p>
 			<label for="<?php echo $widget->get_field_id("no_links"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("no_links"); ?>" name="<?php echo $widget->get_field_name("no_links"); ?>"<?php checked( (bool) $instance["no_links"], true ); ?> />
 				<?php _e( 'No links','seo-link-extension' ); ?>
 			</label>
 		</p>
+		<?php endif; ?>
 		<p>
 			<label for="<?php echo $widget->get_field_id("search_engine_attribute"); ?>">
 				<?php _e( 'SEO friendly URLs:','seo-link-extension' ); ?>
