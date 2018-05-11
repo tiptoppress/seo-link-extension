@@ -1,4 +1,4 @@
-=== SEO Extension ===
+=== SEO and Link Add-on ===
 Contributors: kometschuh
 Tags: seo, post
 Requires at least: 2.8

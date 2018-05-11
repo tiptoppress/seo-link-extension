@@ -1,7 +1,7 @@
-Term and Category Based Posts SEO Extension
+SEO and Link Add-on
 ===============================================
 
-A free extension for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
+A free add-on for the premium widget Term and Category Based Posts Widget available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=description_eext&utm_medium=web">tiptoppress.com</a>.
 
 **Requires:** Term and Category Based Posts Widget 4.7 or higher
 
@@ -13,7 +13,7 @@ A free extension for the premium widget Term and Category Based Posts Widget ava
 
 
 ## Description
-The SEO Extension adds SEO optimization and gather clicks with Google Analytic.
+The SEO and Link Add-on adds SEO optimization and gather clicks with Google Analytic.
 
 ### Try before buy
 
@@ -48,7 +48,7 @@ While using this plugin if you find any bug or any conflict, please submit an is
 2. Download the widget excension.
 3. Upload it to the plugins folder of your blog.
 4. Activate the plugin through the 'Plugins' menu in WordPress
-5. Now, goto the Widgets page of the Appearance section and configure the Excerpt Extension.
+5. Now, goto the Widgets page of the Appearance section and configure the SEO and Link Add-on.
 
 ## Changelog
 #### 0.2 - November 27 2017 =
