@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: SEO and Link Add-on - for the Term and Category Based Posts Widget
+Plugin Name: SEO Link Add-on - For the Term and Category Based Posts Widget
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: SEO on-page optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 0.2
+Version: 1.1.0
 Author URI: http://tiptoppress.com
 */
 
@@ -16,11 +16,15 @@ if ( !defined( 'ABSPATH' ) ) exit;
 const TEXTDOMAIN     = 'seo-link-extension';
 const MINBASEVERSION = '4.7.1';
 
-
-function smashing_save_post_class_meta( $post_id, $post ) {
+/**
+ * Save meta box params
+ *
+ * @since 1.1.0
+ */
+function save_post_meta( $post_id, $post ) {
 
 	/* Verify the nonce before proceeding. */
-	if ( !isset( $_POST['smashing_post_class_nonce'] ) || !wp_verify_nonce( $_POST['smashing_post_class_nonce'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['post_class_nonce'] ) || !wp_verify_nonce( $_POST['post_class_nonce'], basename( __FILE__ ) ) )
 	return $post_id;
 
 	/* Get the post type object. */
@@ -30,14 +34,14 @@ function smashing_save_post_class_meta( $post_id, $post ) {
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
 	return $post_id;
 
-	$url_options = array('class', 'target');
+	$url_options = array('url', 'target');
 	foreach ($url_options as $option)
 	{
-		/* Get the posted data and sanitize it for use as an HTML class. */
-		$new_meta_value = ( isset( $_POST['smashing-post-' . $option] ) ? sanitize_html_class( $_POST['smashing-post-' . $option] ) : '' );
+		/* Get the posted data and sanitize it for use. */
+		$new_meta_value = ( isset( $_POST['post-' . $option] ) ? sanitize_html_class( $_POST['post-' . $option] ) : '' );
 
 		/* Get the meta keys. */
-		$meta_key = 'smashing_post_' . $option;
+		$meta_key = 'post_' . $option;
 
 		/* Get the meta value of the custom field key. */
 		$meta_value = get_post_meta( $post_id, $meta_key, true );
@@ -60,48 +64,66 @@ function smashing_save_post_class_meta( $post_id, $post ) {
 	}
 }
 
-function smashing_post_class_meta_box( $post ) { ?>
+/**
+ * Meta box admin UI
+ *
+ * @since 1.1.0
+ */
+function post_class_meta_box( $post ) { ?>
 
-  <?php wp_nonce_field( basename( __FILE__ ), 'smashing_post_class_nonce' ); ?>
+  <?php wp_nonce_field( basename( __FILE__ ), 'post_class_nonce' ); ?>
 
+  <h4>Custom links</h4>
   <p>
-    <label for="smashing-post-class"><?php _e( "Custom URL", 'seo-link-extension' ); ?></label>
-    <br />
-    <input class="widefat" type="text" name="smashing-post-class" id="smashing-post-class" value="<?php echo esc_attr( get_post_meta( $post->ID, 'smashing_post_class', true ) ); ?>" size="30" />
+	<p>
+    <label for="post-url"><?php _e( "Custom URL:", 'seo-link-extension' ); ?></label>
+	</p>
+    <input class="widefat" type="text" name="post-url" id="post-url" value="<?php echo esc_attr( get_post_meta( $post->ID, 'post_url', true ) ); ?>" size="30" />
+	<p class="howto">Example http://mypage.com</p>
   </p>
   <p>
-    <label for="smashing-post-target">
-		<input class="widefat" type="checkbox" name="smashing-post-target" id="smashing-post-target" <?php checked( (bool) get_post_meta( $post->ID, 'smashing_post_target' ), 1 ); ?> />	
+    <label for="post-target">
+		<input class="widefat" type="checkbox" name="post-target" id="post-target" <?php checked( (bool) get_post_meta( $post->ID, 'post_target' ), 1 ); ?> />	
 		<?php _e( "Open link in a new window", 'seo-link-extension' ); ?>
+		<p class="howto">Adds target attribute _blank</p>
 	</label>
   </p>
 <?php }
 
-function smashing_add_post_meta_boxes() {
+/**
+ * Add the meta box
+ *
+ * @since 1.1.0
+ */
+function add_post_meta_boxes() {
 
 	add_meta_box(
-		'smashing-post-class',							// Unique ID
-		esc_html__( 'Custom link', 'example' ),			// Title
-		__NAMESPACE__.'\smashing_post_class_meta_box',	// Callback function
+		'seo-link-extension',							// Unique ID
+		esc_html__( 'SEO Link Add-on', 'example' ),		// Title
+		__NAMESPACE__.'\post_class_meta_box',			// Callback function
 		'post',											// Admin page (or post type)
 		'side',											// Context
 		'default'										// Priority
 	);
 }
 
-/* Meta box setup function. */
-function smashing_post_meta_boxes_setup() {
+/**
+ * Action hooks for add and save the meta box
+ *
+ * @since 1.1.0
+ */
+function post_meta_boxes_setup() {
 
 	/* Add meta boxes on the 'add_meta_boxes' hook. */
-	add_action( 'add_meta_boxes', __NAMESPACE__.'\smashing_add_post_meta_boxes' );
+	add_action( 'add_meta_boxes', __NAMESPACE__.'\add_post_meta_boxes' );
 
 	/* Save post meta on the 'save_post' hook. */
-	add_action( 'save_post', __NAMESPACE__.'\smashing_save_post_class_meta', 10, 2 );
+	add_action( 'save_post', __NAMESPACE__.'\save_post_meta', 10, 2 );
 }
 
 /* Fire our meta box setup function on the post editor screen. */
-add_action( 'load-post.php', __NAMESPACE__.'\smashing_post_meta_boxes_setup' );
-add_action( 'load-post-new.php', __NAMESPACE__.'\smashing_post_meta_boxes_setup' );
+add_action( 'load-post.php', __NAMESPACE__.'\post_meta_boxes_setup' );
+add_action( 'load-post-new.php', __NAMESPACE__.'\post_meta_boxes_setup' );
 
 
 /**
@@ -110,7 +132,7 @@ add_action( 'load-post-new.php', __NAMESPACE__.'\smashing_post_meta_boxes_setup'
  * @param  array $instance Array which contains the various settings
  * @return string with the anchor attribute
  *
- * @since 4.8
+ * @since 0.2
  */
 function title_link_filter($html,$widget,$instance) {
 	global $post;
@@ -133,11 +155,11 @@ function title_link_filter($html,$widget,$instance) {
 		if (preg_match('/href="[^"]+"/',$html))
 		{
 			// retrieve the global notice for the current post;
-			$post_class = get_post_meta( $post->ID, 'smashing_post_class', true );		
+			$post_class = get_post_meta( $post->ID, 'post_url', true );		
 			$html = preg_replace('/href="[^"]+"/', " href='" . $post_class . "' ", $html);
 		}
 
-		$post_target = get_post_meta( $post->ID, 'smashing_post_target', true );	
+		$post_target = get_post_meta( $post->ID, 'post_target', true );	
 		if(isset($post_target) && $post_target)
 		{
 			$html = str_replace('<a ','<a target="_blank" ',$html);
@@ -155,7 +177,7 @@ add_filter('cpwp_post_html',__NAMESPACE__.'\title_link_filter',10,3);
  * @param  array $instance Array which contains the various settings
  * @return string with the anchor attribute
  *
- * @since 4.8
+ * @since 0.2
  */
 function search_engine_attribute_filter($html,$widget,$instance) {
 
@@ -242,7 +264,7 @@ function form_seo_panel_filter($widget,$instance) {
 	$title_links                     = $instance['title_links'];
 
 	?>
-	<h4 data-panel="seo"><?php _e('SEO','categorypostspro')?></h4>
+	<h4 data-panel="seo"><?php _e('SEO and Links Add-on','categorypostspro')?></h4>
 	<div>
 		<?php if ( version_check( "4.7.1" ) ) : ?>
 		<p>
@@ -255,6 +277,7 @@ function form_seo_panel_filter($widget,$instance) {
 			<label for="<?php echo $widget->get_field_id("title_links_no_links"); ?>">
 				<input type="radio" value="no_links" class="checkbox" id="<?php echo $widget->get_field_id("title_links_no_links"); ?>" name="<?php echo $widget->get_field_name("title_links"); ?>"<?php if($instance["title_links"] === 'no_links'){ echo 'checked="checked"'; }; ?> />
 				<?php _e( 'No links','seo-link-extension' ); ?>
+				<p class="howto">Uses &lt;span&gt;</p>
 			</label>
 		</p>
 		<p>
@@ -307,7 +330,7 @@ add_filter('cpwp_default_settings',__NAMESPACE__.'\cpwp_default_settings');
  */
 function add_action_links ( $links ) {
     $pro_link = array(
-        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_seoext&utm_campaign=get_pro_seoext&utm_medium=action_link">'.__('Get the pro widget needed for this extension','category-posts').'</a>',
+        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_seoext&utm_campaign=get_pro_seoext&utm_medium=action_link">'.__('Get the pro widget needed for this add-on','category-posts').'</a>',
     );
 	
 	$links = array_merge($pro_link, $links);
