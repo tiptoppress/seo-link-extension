@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: SEO Link Add-on - For the Term and Category Based Posts Widget
+Plugin Name: SEO Link Add-on
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: SEO on-page optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
