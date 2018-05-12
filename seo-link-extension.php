@@ -16,6 +16,22 @@ if ( !defined( 'ABSPATH' ) ) exit;
 const TEXTDOMAIN     = 'seo-link-extension';
 const MINBASEVERSION = '4.7.1';
 
+
+/**
+ * Enqueue admin UI styles
+ *
+ * @since 1.1.0
+ */
+function admin_scripts($hook) {
+
+	if ($hook == 'widgets.php' || $hook == 'post.php') { // enqueue only for widget admin and customizer (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+
+		wp_enqueue_style( 'seo-link-extension', plugins_url( 'css/seo-link-styles.css' , __FILE__ ) );
+	}
+}
+
+add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called on widgets.php and costumizer since 3.9
+
 /**
  * Save meta box params
  *
@@ -38,7 +54,7 @@ function save_post_meta( $post_id, $post ) {
 	foreach ($url_options as $option)
 	{
 		/* Get the posted data and sanitize it for use. */
-		$new_meta_value = ( isset( $_POST['post-' . $option] ) ? sanitize_html_class( $_POST['post-' . $option] ) : '' );
+		$new_meta_value = ( isset( $_POST['post-' . $option] ) ? $_POST['post-' . $option] : '' );
 
 		/* Get the meta keys. */
 		$meta_key = 'post_' . $option;
@@ -277,13 +293,14 @@ function form_seo_panel_filter($widget,$instance) {
 			<label for="<?php echo $widget->get_field_id("title_links_no_links"); ?>">
 				<input type="radio" value="no_links" class="checkbox" id="<?php echo $widget->get_field_id("title_links_no_links"); ?>" name="<?php echo $widget->get_field_name("title_links"); ?>"<?php if($instance["title_links"] === 'no_links'){ echo 'checked="checked"'; }; ?> />
 				<?php _e( 'No links','seo-link-extension' ); ?>
-				<p class="howto">Uses &lt;span&gt;</p>
+				<p class="howto">Use &lt;span&gt;</p>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $widget->get_field_id("title_links_custom_links"); ?>">
 				<input type="radio" value="custom_links" class="checkbox" id="<?php echo $widget->get_field_id("title_links_custom_links"); ?>" name="<?php echo $widget->get_field_name("title_links"); ?>"<?php if($instance["title_links"] === 'custom_links'){ echo 'checked="checked"'; }; ?> />
-				<?php _e( 'Custom links (set in post admin)','seo-link-extension' ); ?>
+				<?php _e( 'Custom links','seo-link-extension' ); ?>
+				<p class="howto">Set in post and page admin</p>
 			</label>
 		</p>
 		<?php endif; ?>
