@@ -21,6 +21,7 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 
 = Features =
 
+* Add option to set custom URLs
 * Add option to unlink the post item
 * Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
 
@@ -55,11 +56,14 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Screenshots ==
 
-1. Adds more options for the excerpt output.
-2. Allow HTML in the excerpt.
-3. Solves the double rendered shortcode bug in the excerpt.
+1. Adds an meta box to each post and page admin.
+2. Adds an tab to the base widget.
+3. Installed add-on.
 
 == Changelog ==
+
+= 1.1.0 - May 12 2018 =
+* Add option to set custom URLs
 
 = 0.2 - November 27 2017 =
 * Add option to unlink the post item

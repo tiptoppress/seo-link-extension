@@ -22,6 +22,8 @@ With Term and Category Based Posts Widget version 4.7 or higher we let people do
 Download the Term and Category Based Posts Widget for a free trail from here: [tiptoppress.com/free-trail-localhost](http://tiptoppress.com/free-trail-localhost/?utm_source=wordpress_org&utm_campaign=try_befor_buy_eext&utm_medium=web).
 
 ### Features
+
+* Add option to set custom URLs
 * Add option to unlink the post item
 * Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
 
@@ -51,6 +53,9 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Now, goto the Widgets page of the Appearance section and configure the SEO and Link Add-on.
 
 ## Changelog
+#### 1.1.0 - May 12 2018
+* Add option to set custom URLs
+
 #### 0.2 - November 27 2017 =
 * Add option to unlink the post item
 
