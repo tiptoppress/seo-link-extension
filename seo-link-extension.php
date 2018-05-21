@@ -57,7 +57,7 @@ function save_post_meta( $post_id, $post ) {
 	$url_options = array( 'url', 'target' );
 	foreach ( $url_options as $option ) {
 		/* Get the posted data and sanitize it for use. */
-		$new_meta_value = ( isset( $_POST['post-' . $option] ) ? $_POST['post-' . $option] : '' );
+		$new_meta_value = ( isset( $_POST[ 'post-' . $option ] ) ? $_POST[ 'post-' . $option ] : '' );
 
 		/* Get the meta keys. */
 		$meta_key = 'post_' . $option;
@@ -92,7 +92,7 @@ function post_class_meta_box( $post ) { ?>
 	<p>
 		<label for="post-url">
 			<?php
-				_e( 'Custom URL:', 'seo-link-extension' );
+				esc_html_e( 'Custom URL:', 'seo-link-extension' );
 			?>
 		</label>
 	</p>
@@ -103,7 +103,7 @@ function post_class_meta_box( $post ) { ?>
 		<label for="post-target">
 		<input class="widefat" type="checkbox" name="post-target" id="post-target" <?php checked( (bool) get_post_meta( $post->ID, 'post_target' ), 1 ); ?> />
 			<?php
-				_e( 'Open link in a new window', 'seo-link-extension' );
+				esc_html_e( 'Open link in a new window', 'seo-link-extension' );
 			?>
 		<p class="howto">Adds target attribute _blank</p>
 	</label>
@@ -158,8 +158,7 @@ add_action( 'load-post-new.php', __NAMESPACE__ . '\post_meta_boxes_setup' );
 function title_link_filter( $html, $widget, $instance ) {
 	global $post;
 
-	if ( isset($instance['title_links']) && $instance['title_links'] === "no_links" )
-	{
+	if ( isset( $instance['title_links'] ) && 'no_links' === $instance['title_links'] ) {
 		// remove href, if exist
 		if ( preg_match( '/href="[^"]+"/', $html ) ) {
 			$html = preg_replace( '/href="[^"]+"/', '', $html );
@@ -197,13 +196,14 @@ add_filter( 'cpwp_post_html', __NAMESPACE__ . '\title_link_filter', 10, 3 );
  */
 function search_engine_attribute_filter( $html, $widget, $instance ) {
 
-	if ( isset( $instance['search_engine_attribute']) && $instance['search_engine_attribute'] !== 'none' ) {
+	if ( isset( $instance['search_engine_attribute'] ) && 'none' !== $instance['search_engine_attribute'] ) {
 		// remove old rel, if exist
-		if ( preg_match( '/(.*)rel=".*"(.*)/', $html ))
+		if ( preg_match( '/(.*)rel=".*"(.*)/', $html ) ) {
 			$html = preg_replace( '/rel=".*"/', '', $html );
+		}
 
 		// add attribute
-		switch( $instance['search_engine_attribute'] ) {
+		switch ( $instance['search_engine_attribute'] ) {
 			case 'canonical':
 				$html = str_replace( '<a ', '<a rel="canonical" ', $html );
 				break;
@@ -225,10 +225,12 @@ add_filter( 'cpwp_post_html', __NAMESPACE__ . '\search_engine_attribute_filter',
 *
 */
 function version_check( $min_base_version = MINBASEVERSION ) {
-	$min_base_version = explode( '.', $min_base_version);
+	$min_base_version = explode( '.', $min_base_version );
 
-	if ( ! defined( '\termcategoryPostsPro\VERSION' ) ) return false;
-	$installed_base_version = explode( '.', \termcategoryPostsPro\VERSION);
+	if ( ! defined( '\termcategoryPostsPro\VERSION' ) ) {
+		return false;
+	}
+	$installed_base_version = explode( '.', \termcategoryPostsPro\VERSION );
 
 	$ret = ( $min_base_version[0] < $installed_base_version[0] ) ||
 			( $min_base_version[0] === $installed_base_version[0] && $min_base_version[1] <= $installed_base_version[1] );
@@ -236,15 +238,15 @@ function version_check( $min_base_version = MINBASEVERSION ) {
 	return $ret;
 }
 
- /**
- * Write admin notice if a higher version is needed
- *
- */
+/**
+* Write admin notice if a higher version is needed
+*
+*/
 function version_notice() {
 	if ( ! version_check() ) {
 		?>
 		<div class="update-nag notice">
-			<p><?php printf( __( 'The SEO-Link Extension needs the Term and Category based Posts Wiedget version %s or higher. It is possible that some features are not available. Please <a href="%s">update</a>.', 'category-posts' ), MINBASEVERSION, admin_url('plugins.php') ); ?></p>
+			<p><?php printf( esc_attr( 'The SEO-Link Extension needs the Term and Category based Posts Wiedget version %1$s or higher. It is possible that some features are not available. Please <a href="%1$s">update</a>.', 'category-posts' ), MINBASEVERSION, admin_url( 'plugins.php' ) ); ?></p>
 		</div>
 		<?php
 	}
@@ -280,37 +282,55 @@ function form_seo_panel_filter( $widget, $instance ) {
 	$title_links             = $instance['title_links'];
 
 	?>
-	<h4 data-panel="seo"><?php _e( 'SEO and Links Add-on', 'categorypostspro' )?></h4>
+	<h4 data-panel="seo"><?php esc_html_e( 'SEO and Links Add-on', 'categorypostspro' ); ?></h4>
 	<div>
 		<?php if ( version_check( '4.7.1' ) ) : ?>
 		<p>
-			<label for="<?php echo $widget->get_field_id( 'title_links_default_links' ); ?>">
-				<input type="radio" value="default_links" class="checkbox" id="<?php echo $widget->get_field_id("title_links_default_links"); ?>" name="<?php echo $widget->get_field_name( 'title_links' ); ?>"<?php if( 'default_links' === $instance['title_links'] ){ echo 'checked="checked"'; }; ?> />
-				<?php _e( 'Normal WordPress URL', 'seo-link-extension' ); ?>
+			<label for="<?php echo esc_attr( $widget->get_field_id( 'title_links_default_links' ) ); ?>">
+				<input type="radio" value="default_links" class="checkbox" id="<?php echo esc_attr( $widget->get_field_id( 'title_links_default_links' ) ); ?>" name="<?php echo esc_attr( $widget->get_field_name( 'title_links' ) ); ?>"
+				<?php
+				if ( 'default_links' === $instance['title_links'] ) {
+					echo 'checked="checked"';
+				};
+				?>
+				/>
+				<?php esc_html_e( 'Normal WordPress URL', 'seo-link-extension' ); ?>
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $widget->get_field_id( 'title_links_no_links' ); ?>">
-				<input type="radio" value='no_links' class="checkbox" id="<?php echo $widget->get_field_id( 'title_links_no_links' ); ?>" name="<?php echo $widget->get_field_name( 'title_links' ); ?>"<?php if( 'no_links' === $instance['title_links'] ){ echo 'checked="checked"'; }; ?> />
-				<?php _e( 'No links', 'seo-link-extension' ); ?>
+			<label for="<?php echo esc_attr( $widget->get_field_id( 'title_links_no_links' ) ); ?>">
+				<input type="radio" value='no_links' class="checkbox" id="<?php echo esc_attr( $widget->get_field_id( 'title_links_no_links' ) ); ?>" name="<?php echo esc_attr( $widget->get_field_name( 'title_links' ) ); ?>"
+				<?php
+				if ( 'no_links' === $instance['title_links'] ) {
+					echo 'checked="checked"';
+				};
+				?>
+				/>
+				<?php esc_html_e( 'No links', 'seo-link-extension' ); ?>
 				<p class="howto">Use &lt;span&gt;</p>
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $widget->get_field_id( 'title_links_custom_links' ); ?>">
-				<input type="radio" value="custom_links" class="checkbox" id="<?php echo $widget->get_field_id("title_links_custom_links"); ?>" name="<?php echo $widget->get_field_name( 'title_links' ); ?>"<?php if( 'custom_links' === $instance['title_links'] ){ echo 'checked="checked"'; }; ?> />
-				<?php _e( 'Custom links', 'seo-link-extension' ); ?>
+			<label for="<?php echo esc_attr( $widget->get_field_id( 'title_links_custom_links' ) ); ?>">
+				<input type="radio" value="custom_links" class="checkbox" id="<?php echo esc_attr( $widget->get_field_id( 'title_links_custom_links' ) ); ?>" name="<?php echo esc_attr( $widget->get_field_name( 'title_links' ) ); ?>"
+				<?php
+				if ( 'custom_links' === $instance['title_links'] ) {
+					echo 'checked="checked"';
+				};
+				?>
+				/>
+				<?php esc_html_e( 'Custom links', 'seo-link-extension' ); ?>
 				<p class="howto">Set in post and page admin</p>
 			</label>
 		</p>
 		<?php endif; ?>
 		<p>
-			<label for="<?php echo $widget->get_field_id( 'search_engine_attribute' ); ?>">
-				<?php _e( 'SEO friendly URLs:', 'seo-link-extension' ); ?>
-				<select id="<?php echo $widget->get_field_id( 'search_engine_attribute' ); ?>" name="<?php echo $widget->get_field_name( 'search_engine_attribute' ); ?>">
-					<option value="none" <?php selected( $search_engine_attribute, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-					<option value="canonical" <?php selected( $search_engine_attribute, 'canonical')?>><?php _e( 'canonical', 'category-posts' ); ?></option>
-					<option value="nofollow" <?php selected( $search_engine_attribute, 'nofollow')?>><?php _e( 'nofollow', 'category-posts' ); ?></option>
+			<label for="<?php echo esc_attr( $widget->get_field_id( 'search_engine_attribute' ) ); ?>">
+				<?php esc_html_e( 'SEO friendly URLs:', 'seo-link-extension' ); ?>
+				<select id="<?php echo esc_attr( $widget->get_field_id( 'search_engine_attribute' ) ); ?>" name="<?php echo esc_attr( $widget->get_field_name( 'search_engine_attribute' ) ); ?>">
+					<option value="none" <?php selected( $search_engine_attribute, 'none' ); ?>><?php esc_html_e( 'None', 'category-posts' ); ?></option>
+					<option value="canonical" <?php selected( $search_engine_attribute, 'canonical' ); ?>><?php esc_html_e( 'canonical', 'category-posts' ); ?></option>
+					<option value="nofollow" <?php selected( $search_engine_attribute, 'nofollow' ); ?>><?php esc_html_e( 'nofollow', 'category-posts' ); ?></option>
 				</select>
 			</label>
 		</p>
