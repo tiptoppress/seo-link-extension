@@ -11,7 +11,9 @@ Author URI: http://tiptoppress.com
 namespace termCategoryPostsPro\seoExtension;
 
 // Don't call the file directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 const TEXTDOMAIN     = 'seo-link-extension';
 const MINBASEVERSION = '4.7.1';
@@ -22,15 +24,15 @@ const MINBASEVERSION = '4.7.1';
  *
  * @since 1.1.0
  */
-function admin_scripts($hook) {
+function admin_scripts( $hook ) {
 
-	if ($hook == 'widgets.php' || $hook == 'post.php') { // enqueue only for widget admin and customizer (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+	if ( 'widgets.php' === $hook || 'post.php' === $hook ) { // enqueue only for widget admin and customizer (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
-		wp_enqueue_style( 'seo-link-extension', plugins_url( 'css/seo-link-styles.css' , __FILE__ ) );
+		wp_enqueue_style( 'seo-link-extension', plugins_url( 'css/seo-link-styles.css', __FILE__ ) );
 	}
 }
 
-add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called on widgets.php and costumizer since 3.9
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts' ); // "called on widgets.php and costumizer since 3.9
 
 /**
  * Save meta box params
@@ -40,19 +42,19 @@ add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called 
 function save_post_meta( $post_id, $post ) {
 
 	/* Verify the nonce before proceeding. */
-	if ( !isset( $_POST['post_class_nonce'] ) || !wp_verify_nonce( $_POST['post_class_nonce'], basename( __FILE__ ) ) )
-	return $post_id;
+	if ( ! isset( $_POST['post_class_nonce'] ) || ! wp_verify_nonce( $_POST['post_class_nonce'], basename( __FILE__ ) ) ) {
+		return $post_id;
+	}
 
 	/* Get the post type object. */
 	$post_type = get_post_type_object( $post->post_type );
 
 	/* Check if the current user has permission to edit the post. */
-	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+	if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) )
 	return $post_id;
 
-	$url_options = array('url', 'target');
-	foreach ($url_options as $option)
-	{
+	$url_options = array( 'url', 'target' );
+	foreach ( $url_options as $option ) {
 		/* Get the posted data and sanitize it for use. */
 		$new_meta_value = ( isset( $_POST['post-' . $option] ) ? $_POST['post-' . $option] : '' );
 
@@ -62,18 +64,13 @@ function save_post_meta( $post_id, $post ) {
 		/* Get the meta value of the custom field key. */
 		$meta_value = get_post_meta( $post_id, $meta_key, true );
 
-		if ( $new_meta_value && '' == $meta_value )
-		{
+		if ( $new_meta_value && '' === $meta_value ) {
 			/* If a new meta value was added and there was no previous value, add it. */
 			add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-		}
-		elseif ( $new_meta_value && $new_meta_value != $meta_value )
-		{
+		} elseif ( $new_meta_value && $new_meta_value !== $meta_value ) {
 			/* If the new meta value does not match the old value, update it. */
 			update_post_meta( $post_id, $meta_key, $new_meta_value );
-		}
-		elseif ( '' == $new_meta_value && $meta_value )
-		{
+		} elseif ( '' === $new_meta_value && $meta_value ) {
 			/* If there is no new meta value but an old value exists, delete it. */
 			delete_post_meta( $post_id, $meta_key, $meta_value );
 		}
@@ -87,24 +84,31 @@ function save_post_meta( $post_id, $post ) {
  */
 function post_class_meta_box( $post ) { ?>
 
-  <?php wp_nonce_field( basename( __FILE__ ), 'post_class_nonce' ); ?>
+<?php wp_nonce_field( basename( __FILE__ ), 'post_class_nonce' ); ?>
 
-  <h4>Custom links</h4>
-  <p>
+	<h4>Custom links</h4>
 	<p>
-    <label for="post-url"><?php _e( "Custom URL:", 'seo-link-extension' ); ?></label>
+	<p>
+		<label for="post-url">
+			<?php
+				_e( 'Custom URL:', 'seo-link-extension' );
+			?>
+		</label>
 	</p>
-    <input class="widefat" type="text" name="post-url" id="post-url" value="<?php echo esc_attr( get_post_meta( $post->ID, 'post_url', true ) ); ?>" size="30" />
+		<input class="widefat" type="text" name="post-url" id="post-url" value="<?php echo esc_attr( get_post_meta( $post->ID, 'post_url', true ) ); ?>" size="30" />
 	<p class="howto">Example http://mypage.com</p>
-  </p>
-  <p>
-    <label for="post-target">
-		<input class="widefat" type="checkbox" name="post-target" id="post-target" <?php checked( (bool) get_post_meta( $post->ID, 'post_target' ), 1 ); ?> />	
-		<?php _e( "Open link in a new window", 'seo-link-extension' ); ?>
+	</p>
+	<p>
+		<label for="post-target">
+		<input class="widefat" type="checkbox" name="post-target" id="post-target" <?php checked( (bool) get_post_meta( $post->ID, 'post_target' ), 1 ); ?> />
+			<?php
+				_e( 'Open link in a new window', 'seo-link-extension' );
+			?>
 		<p class="howto">Adds target attribute _blank</p>
 	</label>
-  </p>
-<?php }
+	</p>
+<?php
+}
 
 /**
  * Add the meta box
@@ -155,7 +159,7 @@ function title_link_filter($html,$widget,$instance) {
 
 	if (isset($instance['title_links']) && $instance['title_links'] == "no_links")
 	{
-		// remove href, if exist	
+		// remove href, if exist
 		if (preg_match('/href="[^"]+"/',$html))
 		{
 			$html = preg_replace('/href="[^"]+"/', "", $html);
@@ -171,11 +175,11 @@ function title_link_filter($html,$widget,$instance) {
 		if (preg_match('/href="[^"]+"/',$html))
 		{
 			// retrieve the global notice for the current post;
-			$post_class = get_post_meta( $post->ID, 'post_url', true );		
+			$post_class = get_post_meta( $post->ID, 'post_url', true );
 			$html = preg_replace('/href="[^"]+"/', " href='" . $post_class . "' ", $html);
 		}
 
-		$post_target = get_post_meta( $post->ID, 'post_target', true );	
+		$post_target = get_post_meta( $post->ID, 'post_target', true );
 		if(isset($post_target) && $post_target)
 		{
 			$html = str_replace('<a ','<a target="_blank" ',$html);
@@ -198,10 +202,10 @@ add_filter('cpwp_post_html',__NAMESPACE__.'\title_link_filter',10,3);
 function search_engine_attribute_filter($html,$widget,$instance) {
 
 	if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none') {
-		// remove old rel, if exist	
+		// remove old rel, if exist
 		if (preg_match('/(.*)rel=".*"(.*)/',$html))
 			$html = preg_replace('/rel=".*"/', "", $html);
-			
+
 		// add attribute
 		switch ($instance['search_engine_attribute']) {
 			case 'canonical':
@@ -224,15 +228,15 @@ add_filter('cpwp_post_html',__NAMESPACE__.'\search_engine_attribute_filter',10,3
  *  @return Base widget supporteds this Extension version
  *
  */
-function version_check( $min_base_version = MINBASEVERSION ) {	
+function version_check( $min_base_version = MINBASEVERSION ) {
 	$min_base_version = explode('.', $min_base_version);
-	
+
 	if ( !defined( '\termcategoryPostsPro\VERSION' ) ) return false;
 	$installed_base_version = explode('.', \termcategoryPostsPro\VERSION);
 
 	$ret = ($min_base_version[0] < $installed_base_version[0]) ||
 			($min_base_version[0] == $installed_base_version[0] && $min_base_version[1] <= $installed_base_version[1]);
-	
+
 	return $ret;
 }
 
@@ -269,12 +273,12 @@ function form_seo_panel_filter($widget,$instance) {
 		return;
 	}
 
-	$instance = wp_parse_args( ( array ) $instance, array(	
+	$instance = wp_parse_args( ( array ) $instance, array(
 		// extension options
 		'search_engine_attribute'         => 'none',
 		'title_links'                     => 'default_links',
 	) );
-	
+
 	// extension options
 	$search_engine_attribute         = $instance['search_engine_attribute'];
 	$title_links                     = $instance['title_links'];
@@ -340,18 +344,18 @@ add_filter('cpwp_default_settings',__NAMESPACE__.'\cpwp_default_settings');
 
 /**
  *  Applied to the list of links to display on the plugins page (beside the activate/deactivate links).
- *  
+ *
  *  @return array of the widget links
- *  
+ *
  *  @since 0.1
  */
 function add_action_links ( $links ) {
     $pro_link = array(
         '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_seoext&utm_campaign=get_pro_seoext&utm_medium=action_link">'.__('Get the pro widget needed for this add-on','category-posts').'</a>',
     );
-	
+
 	$links = array_merge($pro_link, $links);
-    
+
     return $links;
 }
 
