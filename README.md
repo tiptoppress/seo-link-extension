@@ -28,15 +28,15 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
 
 ## Screenshot
-Adds more options for the excerpt output
+Add custom links for each post
 
 ![Add custom links for each post](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.png?raw=true "Add custom links for each post")
 
-Allow HTML in the excerpt
+Set SEO and link options to get more specific HTML
 
 ![Set SEO and link options to get more specific HTML](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.png?raw=true "Set SEO and link options to get more specific HTML")
 
-Solves the double rendered shortcode bug in the excerpt
+Activate the Add-on in the widget admin
 
 ![Activate the Add-on in the widget admin](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.png?raw=true "Activate the Add-on in the widget admin")
 
