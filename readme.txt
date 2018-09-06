@@ -56,9 +56,9 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Screenshots ==
 
-1. Adds an meta box to each post and page admin.
-2. Adds an tab to the base widget.
-3. Installed add-on.
+1. Add custom links for each post.
+2. Set SEO and link options to get more specific HTML.
+3. Activate the Add-on in the widget admin.
 
 == Changelog ==
 

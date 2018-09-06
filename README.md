@@ -30,15 +30,15 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 ## Screenshot
 Adds more options for the excerpt output
 
-![Adds more options for the excerpt output](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.png?raw=true "Adds more options for the excerpt output")
+![Add custom links for each post](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-1.png?raw=true "Add custom links for each post")
 
 Allow HTML in the excerpt
 
-![Allow HTML in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.png?raw=true "Allow HTML in the excerpt")
+![Set SEO and link options to get more specific HTML](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-2.png?raw=true "Set SEO and link options to get more specific HTML")
 
 Solves the double rendered shortcode bug in the excerpt
 
-![Solves the double rendered shortcode bug in the excerpt](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.png?raw=true "Solves the double rendered shortcode bug in the excerpt")
+![Activate the Add-on in the widget admin](https://github.com/tiptoppress/seo-extension/blob/master/screenshot-3.png?raw=true "Activate the Add-on in the widget admin")
 
 
 ### Contribute
