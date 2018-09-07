@@ -217,6 +217,34 @@ function search_engine_attribute_filter( $html, $widget, $instance ) {
 
 add_filter( 'cpwp_post_html', __NAMESPACE__ . '\search_engine_attribute_filter', 10, 3 );
 
+/**
+ * Filter to add rel attribute to all widget links and make other website links more important
+ *
+ * @param  array $instance Array which contains the various settings
+ * @return string with the anchor attribute
+ *
+ * @since 1.1.0
+ */
+function attached_image_attributes( $html, $widget, $instance ) {
+
+	if ( isset( $instance['thumbnail_attribute_alt'] ) && $instance['thumbnail_attribute_alt'] ) {
+		// remove old rel, if exist
+		if ( preg_match( '/(.*)alt=".*"(.*)/', $html ) ) {
+			$html = preg_replace( '/alt="[^"]*"/', '', $html );
+		}
+	}
+
+	if ( isset( $instance['thumbnail_attribute_title'] ) && $instance['thumbnail_attribute_title'] ) {
+		// remove old rel, if exist
+		if ( preg_match( '/(.*)title=".*"(.*)/', $html ) ) {
+			$html = preg_replace( '/title="[^"]*"/', '', $html );
+		}
+	}
+	return $html;
+}
+
+add_filter( 'cpwp_post_html', __NAMESPACE__ . '\attached_image_attributes', 10, 3 );
+
 
 /**
 * Check the Term and Category based Posts Widget version
@@ -273,13 +301,17 @@ function form_seo_panel_filter( $widget, $instance ) {
 
 	$instance = wp_parse_args( (array) $instance, array(
 		// extension options
-		'search_engine_attribute' => 'none',
-		'title_links'             => 'default_links',
+		'search_engine_attribute'   => 'none',
+		'title_links'               => 'default_links',
+		'thumbnail_attribute_alt'   => '',
+		'thumbnail_attribute_title' => '',
 	) );
 
 	// extension options
-	$search_engine_attribute = $instance['search_engine_attribute'];
-	$title_links             = $instance['title_links'];
+	$search_engine_attribute   = $instance['search_engine_attribute'];
+	$title_links               = $instance['title_links'];
+	$thumbnail_attribute_alt   = $instance['thumbnail_attribute_alt'];
+	$thumbnail_attribute_title = $instance['thumbnail_attribute_title'];
 
 	?>
 	<h4 data-panel="seo"><?php esc_html_e( 'SEO and Links Add-on', 'categorypostspro' ); ?></h4>
@@ -334,6 +366,28 @@ function form_seo_panel_filter( $widget, $instance ) {
 				</select>
 			</label>
 		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id("thumbnail_attribute_alt"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("thumbnail_attribute_alt"); ?>" name="<?php echo $widget->get_field_name("thumbnail_attribute_alt"); ?>"
+				<?php
+				if ( $thumbnail_attribute_alt == true ) {
+					echo 'checked="checked"';
+				};
+				?> />
+				<?php esc_html_e( 'Do not write the thumbnail ALT attribute.', 'seo-link-extension' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $widget->get_field_id("thumbnail_attribute_title"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $widget->get_field_id("thumbnail_attribute_title"); ?>" name="<?php echo $widget->get_field_name("thumbnail_attribute_title"); ?>"
+				<?php
+				if ( $thumbnail_attribute_title == true ) {
+					echo 'checked="checked"';
+				};
+				?> />
+				<?php esc_html_e( 'Do not write the thumbnail TITLE attribute (Image tooltip).', 'seo-link-extension' ); ?>
+			</label>
+		</p>
 	</div>
 	<?php
 }
@@ -349,8 +403,10 @@ add_filter( 'cpwp_after_general_panel', __NAMESPACE__ . '\form_seo_panel_filter'
 function cpwp_default_settings( $setting ) {
 
 	return wp_parse_args( (array) $setting, array(
-		'search_engine_attribute' => 'none',
-		'title_links'             => 'default_links',
+		'search_engine_attribute'   => 'none',
+		'title_links'               => 'default_links',
+		'thumbnail_attribute_alt'   => '',
+		'thumbnail_attribute_title' => '',
 	) );
 }
 

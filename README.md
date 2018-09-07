@@ -26,6 +26,7 @@ Download the Term and Category Based Posts Widget for a free trail from here: [t
 * Add option to set custom URLs
 * Add option to unlink the post item
 * Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
+* Add option to disable endable thumb attributes (title and alt)
 
 ## Screenshot
 Add custom links for each post
