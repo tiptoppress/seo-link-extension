@@ -144,7 +144,7 @@ function post_meta_boxes_setup() {
 	add_action( 'save_post', __NAMESPACE__ . '\save_post_types_meta' );
 
 	/* Edit post meta for attachment/Media. */
-	add_action( 'edit_attachment', __NAMESPACE__ . '\save_attachment_meta' );
+	add_action( 'edit_attachment', __NAMESPACE__ . '\save_post_types_meta' );
 }
 
 /* Fire our meta box setup function on the post editor screen. */
