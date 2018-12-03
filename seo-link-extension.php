@@ -39,7 +39,8 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts' ); // "cal
  *
  * @since 1.1.0
  */
-function save_post_meta( $post_id, $post ) {
+function save_post_types_meta( $post_id ){
+	global $post; 
 
 	/* Verify the nonce before proceeding. */
 	if ( ! isset( $_POST['post_class_nonce'] ) || ! wp_verify_nonce( $_POST['post_class_nonce'], basename( __FILE__ ) ) ) {
@@ -111,6 +112,7 @@ function post_class_meta_box( $post ) { ?>
 <?php
 }
 
+
 /**
  * Add the meta box
  *
@@ -122,7 +124,7 @@ function add_post_meta_boxes() {
 		'seo-link-extension', // Unique ID
 		esc_html__( 'SEO Link Add-on', 'example' ), // Title
 		__NAMESPACE__ . '\post_class_meta_box', // Callback function
-		'post', // Admin page (or post type)
+		get_post_types(), // all post types admin
 		'side', // Context
 		'default' // Priority
 	);
@@ -139,7 +141,10 @@ function post_meta_boxes_setup() {
 	add_action( 'add_meta_boxes', __NAMESPACE__ . '\add_post_meta_boxes' );
 
 	/* Save post meta on the 'save_post' hook. */
-	add_action( 'save_post', __NAMESPACE__ . '\save_post_meta', 10, 2 );
+	add_action( 'save_post', __NAMESPACE__ . '\save_post_types_meta' );
+
+	/* Edit post meta for attachment/Media. */
+	add_action( 'edit_attachment', __NAMESPACE__ . '\save_attachment_meta' );
 }
 
 /* Fire our meta box setup function on the post editor screen. */
@@ -339,7 +344,7 @@ function form_seo_panel_filter( $widget, $instance ) {
 				?>
 				/>
 				<?php esc_html_e( 'No links', 'seo-link-extension' ); ?>
-				<p class="howto">Use &lt;span&gt;</p>
+				<p class="howto">Use &lt;span&gt;text&lt;/span&gt;</p>
 			</label>
 		</p>
 		<p>
@@ -352,7 +357,7 @@ function form_seo_panel_filter( $widget, $instance ) {
 				?>
 				/>
 				<?php esc_html_e( 'Custom links', 'seo-link-extension' ); ?>
-				<p class="howto">Set in post and page admin</p>
+				<p class="howto">Set in post, page, etc. edit admin</p>
 			</label>
 		</p>
 		<?php endif; ?>
