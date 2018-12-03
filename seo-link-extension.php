@@ -271,6 +271,13 @@ function version_check( $min_base_version = MINBASEVERSION ) {
 	return $ret;
 }
 
+function base_widget_check() {
+	if ( ! defined( '\termcategoryPostsPro\WIDGET_BASE_ID' ) ) {
+		return false;
+	}
+	return true;
+}
+
 /**
 * Write admin notice if a higher version is needed
 *
@@ -427,10 +434,13 @@ add_filter( 'cpwp_default_settings', __NAMESPACE__ . '\cpwp_default_settings' );
  *  @since 0.1
  */
 function add_action_links( $links ) {
-	$pro_link = array(
-		'<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_seoext&utm_campaign=get_pro_seoext&utm_medium=action_link">' . __( 'Get the pro widget needed for this add-on', 'category-posts' ) . '</a>',
-	);
-	$links    = array_merge( $pro_link, $links );
+
+	if( ! base_widget_check() ) {
+		$pro_link = array(
+			'<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">' . __( 'Get the pro widget needed for this add-on', 'category-posts' ) . '</a>',
+		);
+		$links    = array_merge( $pro_link, $links );
+	}
 	return $links;
 }
 
