@@ -163,7 +163,8 @@ add_action( 'load-post-new.php', __NAMESPACE__ . '\post_meta_boxes_setup' );
 function title_link_filter( $html, $widget, $instance ) {
 	global $post;
 
-	if ( isset( $instance['title_links'] ) && 'no_links' === $instance['title_links'] ) {
+	if ( isset( $instance['title_links'] ) && 'no_links' === $instance['title_links'] ||
+			isset( $instance['title_links'] ) && 'custom_links' === $instance['title_links'] && '' === get_post_meta( $post->ID, 'post_url', true ) ) {
 		// remove href, if exist
 		if ( preg_match( '/href="[^"]+"/', $html ) ) {
 			$html = preg_replace( '/href="[^"]+"/', '', $html );
