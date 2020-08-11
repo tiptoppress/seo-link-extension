@@ -4,7 +4,7 @@ Plugin Name: SEO Link Add-on
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
 Description: SEO on-page optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
 Author: TipTopPress
-Version: 1.1.0
+Version: 1.2.0
 Author URI: http://tiptoppress.com
 */
 
@@ -104,7 +104,7 @@ function post_class_meta_box( $post ) { ?>
 		<label for="post-target">
 		<input class="widefat" type="checkbox" name="post-target" id="post-target" <?php checked( (bool) get_post_meta( $post->ID, 'post_target' ), 1 ); ?> />
 			<?php
-				esc_html_e( 'Open link in a new window', 'seo-link-extension' );
+				esc_html_e( 'Opens link in a new window', 'seo-link-extension' );
 			?>
 		<p class="howto">Adds target attribute _blank</p>
 	</label>
@@ -120,11 +120,14 @@ function post_class_meta_box( $post ) { ?>
  */
 function add_post_meta_boxes() {
 
+	$post_types = get_post_types();
+	unset($post_types['attachment']);
+
 	add_meta_box(
 		'seo-link-extension', // Unique ID
 		esc_html__( 'SEO Link Add-on', 'example' ), // Title
 		__NAMESPACE__ . '\post_class_meta_box', // Callback function
-		get_post_types(), // all post types admin
+		$post_types,  // all post types except attachment/Media
 		'side', // Context
 		'default' // Priority
 	);
@@ -151,6 +154,55 @@ function post_meta_boxes_setup() {
 add_action( 'load-post.php', __NAMESPACE__ . '\post_meta_boxes_setup' );
 add_action( 'load-post-new.php', __NAMESPACE__ . '\post_meta_boxes_setup' );
 
+/**
+ * Action hooks for add custom fields to attachments
+ *
+ * @since 1.2.0
+ */
+function edit_attachment_fields( $form_fields, $post = null ) {
+
+	// Define input type 'text'
+	$post_url = get_post_meta( $post->ID, 'post_url', true );
+	$form_fields['post_url'] = array(
+		'input' => 'text',
+		'value' => $post_url ? $post_url : '',
+		'label' => __( 'Custom URL:' ),
+		'helps' => __( 'Example http://mypage.com' )
+	);
+
+	// Define input type 'checkbox'
+	$post_target = get_post_meta( $post->ID, 'post_target', true );
+	$form_fields['post_target'] = array(
+		'input' => 'html',
+		'html' => '<input' . checked( true, (bool) $post_target, false ) . ' type="checkbox" name="attachments[' . $post->ID . '][post_target]" id="attachments-' . $post->ID . '-post_target" value="1" /><lable>Opens link in a new window</lable>',
+		'label' => __( '' ),
+		'helps' => __( 'Adds target attribute _blank' )
+	);
+
+	// We return the completed $form_fields array
+	return $form_fields;
+}
+
+add_filter( 'attachment_fields_to_edit', __NAMESPACE__ . '\edit_attachment_fields', 10, 2 );
+
+/**
+ * Action hooks for save custom fields to attachments
+ *
+ * @since 1.2.0
+ */
+function save_attachment_fields( $attachment_id ) { 
+	if ( isset( $_REQUEST['attachments'][$attachment_id]['post_url'] ) ) {
+		$post_url = $_REQUEST['attachments'][$attachment_id]['post_url'];
+		update_post_meta( $attachment_id, 'post_url', $post_url );
+	}
+
+	$post_target = '';
+	if ( isset( $_REQUEST['attachments'][$attachment_id]['post_target'] ) ) {
+		$post_target = $_REQUEST['attachments'][$attachment_id]['post_target'];
+	}
+	update_post_meta( $attachment_id, 'post_target', $post_target);
+}
+add_action( 'edit_attachment',  __NAMESPACE__ . '\save_attachment_fields' );
 
 /**
  * Filter to add rel attribute to all widget links and make other website links more important
@@ -233,7 +285,7 @@ add_filter( 'cpwp_post_html', __NAMESPACE__ . '\search_engine_attribute_filter',
  */
 function attached_image_attributes( $html, $widget, $instance ) {
 
-	if ( isset( $instance['thumbnail_attribute_alt'] ) && $instance['thumbnail_attribute_alt'] ) {
+	if ( isset( $instance['thumbnail_attribute'] ) && $instance['thumbnail_attribute'] ) {
 		// remove old rel, if exist
 		if ( preg_match( '/(.*)alt=".*"(.*)/', $html ) ) {
 			$html = preg_replace( '/alt="[^"]*"/', '', $html );

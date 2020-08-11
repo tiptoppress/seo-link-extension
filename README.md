@@ -54,6 +54,9 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Now, goto the Widgets page of the Appearance section and configure the SEO and Link Add-on.
 
 ## Changelog
+#### 1.2.0 - August 11 2020
+* Add option add custom fields to attachments
+
 #### 1.1.0 - May 12 2018
 * Add option to set custom URLs
 

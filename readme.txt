@@ -63,6 +63,9 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Changelog ==
 
+= 1.2.0 - August 11 2020 =
+* Add option add custom fields to attachments
+
 = 1.1.0 - May 12 2018 =
 * Add option to set custom URLs
 
