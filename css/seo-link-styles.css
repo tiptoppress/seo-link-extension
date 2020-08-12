@@ -2,3 +2,11 @@
 .howto {
     padding-left: 10px;
 }
+
+.attachment-compat input {
+    vertical-align: sub;
+}
+
+.attachment-compat lable {
+    vertical-align: bottom;
+}

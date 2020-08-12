@@ -18,15 +18,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 const TEXTDOMAIN     = 'seo-link-extension';
 const MINBASEVERSION = '4.7.1';
 
-
 /**
  * Enqueue admin UI styles
  *
  * @since 1.1.0
  */
-function admin_scripts( $hook ) {
+function admin_scripts( $hook ) { error_log( $hook );
 
-	if ( 'widgets.php' === $hook || 'post.php' === $hook ) { // enqueue only for widget admin and customizer (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+	/* Enqueue only for widget admin and customizer
+	 *
+	 * add if upload.php: option add custom fields to attachments, since 1.2.0
+	 * add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181
+	 * */
+	if ( 'widgets.php' === $hook || 'post.php' === $hook || 'upload.php' == $hook ) {
 
 		wp_enqueue_style( 'seo-link-extension', plugins_url( 'css/seo-link-styles.css', __FILE__ ) );
 	}
