@@ -3,10 +3,12 @@
     padding-left: 10px;
 }
 
-.attachment-compat input {
-    vertical-align: sub;
+.compat-field-post_target input {
+    position: absolute;
 }
 
-.attachment-compat lable {
-    vertical-align: bottom;
+.compat-field-post_target lable {
+    padding-left: 28px;
+    display: block;
+    padding-top: 8px;
 }
