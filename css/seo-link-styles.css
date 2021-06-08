@@ -1,6 +1,18 @@
 
+/* Normalize */
+
+[data-panel=seo] + div input[type=radio] {
+    width: 0px;
+}
+
+[data-panel=seo] + div input[type=radio]:before {
+    content: unset;
+}
+
+/* Indents */
+
 .howto {
-    padding-left: 10px;
+    padding: 0 10px 10px;
 }
 
 .compat-field-post_target input {
