@@ -6,7 +6,8 @@
 }
 
 [data-panel=seo] + div input[type=radio]:before {
-    content: unset;
+    content: '';
+    border-radius: 50% !important;
 }
 
 /* Indents */
