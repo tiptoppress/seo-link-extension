@@ -2,9 +2,9 @@
 /*
 Plugin Name: SEO Link Add-on
 Plugin URI: http://tiptoppress.com/downloads/term-and-category-based-posts-widget/
-Description: SEO on-page optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget.
+Description: SEO on-page optimization and gather clicks with Google Analytic for the premium widget Term and Category Based Posts Widget. Works with both the classic widget and the Gutenberg block.
 Author: TipTopPress
-Version: 1.2.0
+Version: 1.3.0
 Author URI: http://tiptoppress.com
 */
 
@@ -37,6 +37,94 @@ function admin_scripts( $hook ) { error_log( $hook );
 }
 
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts' ); // "called on widgets.php and costumizer since 3.9
+
+/**
+ * Enqueue the block editor JS that adds this add-on's controls to the
+ * Term and Category based Posts block (see js/block-editor.js).
+ *
+ * Priority 5 so this script's `blocks.registerBlockType` filter is
+ * registered before the base plugin's own enqueue_block_editor_assets
+ * callback (term_category_posts_block_editor_assets(), priority 10, in
+ * cat-posts-block.php) enqueues build/index.js, which calls
+ * registerBlockType() as soon as it runs.
+ *
+ * @since 1.3.0
+ */
+function block_editor_assets() {
+
+	if ( ! class_exists( '\WP_Block_Type_Registry' ) ||
+		! \WP_Block_Type_Registry::get_instance()->is_registered( 'tiptip/term-category-posts-block' ) ) {
+		return;
+	}
+
+	$file = plugin_dir_path( __FILE__ ) . 'js/block-editor.js';
+
+	wp_enqueue_script(
+		'seo-link-extension-block-editor',
+		plugins_url( 'js/block-editor.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-hooks', 'wp-element', 'wp-components', 'wp-i18n' ),
+		is_readable( $file ) ? filemtime( $file ) : null,
+		false
+	);
+}
+
+add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\block_editor_assets', 5 );
+
+/**
+ * Register this add-on's four settings as attributes of the Term and
+ * Category based Posts block, in PHP.
+ *
+ * js/block-editor.js already registers the same attributes on the client
+ * (via the core `blocks.registerBlockType` filter) - that copy is what lets
+ * the block editor recognize titleLinks/searchEngineAttribute/etc. as real
+ * attributes, so setAttributes() persists them into the block's saved
+ * comment delimiter. But the editor's block preview (ServerSideRender)
+ * fetches its markup through the `/wp/v2/block-renderer/...` REST endpoint,
+ * which validates the `attributes` request param against the block type as
+ * PHP has it registered - with unknown properties rejected outright
+ * ("rest_additional_properties_forbidden"). This filter is what makes PHP's
+ * registration agree with the client's, so that request stops 400ing.
+ *
+ * @param array $settings Array of settings for registering a block type as
+ *                         built from block.json by register_block_type_from_metadata().
+ * @param array $metadata  Block metadata, as read from block.json.
+ *
+ * @return array The (possibly extended) block settings.
+ *
+ * @since 1.3.0
+ */
+function add_block_attributes( $settings, $metadata ) {
+
+	if ( ! isset( $metadata['name'] ) || 'tiptip/term-category-posts-block' !== $metadata['name'] ) {
+		return $settings;
+	}
+
+	$settings['attributes'] = array_merge(
+		isset( $settings['attributes'] ) && is_array( $settings['attributes'] ) ? $settings['attributes'] : array(),
+		array(
+			'titleLinks'               => array(
+				'type'    => 'string',
+				'default' => 'default_links',
+			),
+			'searchEngineAttribute'     => array(
+				'type'    => 'string',
+				'default' => 'none',
+			),
+			'thumbnailAttributeAlt'     => array(
+				'type'    => 'boolean',
+				'default' => false,
+			),
+			'thumbnailAttributeTitle'   => array(
+				'type'    => 'boolean',
+				'default' => false,
+			),
+		)
+	);
+
+	return $settings;
+}
+
+add_filter( 'block_type_metadata_settings', __NAMESPACE__ . '\add_block_attributes', 10, 2 );
 
 /**
  * Save meta box params
@@ -480,6 +568,34 @@ function cpwp_default_settings( $setting ) {
 }
 
 add_filter( 'cpwp_default_settings', __NAMESPACE__ . '\cpwp_default_settings' );
+
+/**
+ * Carry this add-on's block attributes into the widget instance the block
+ * rendering code (and therefore the `cpwp_post_html` filters above) uses.
+ *
+ * The block registers these attributes itself (see js/block-editor.js) via
+ * the core `blocks.registerBlockType` filter, so cat-posts-block.php's
+ * build_block_instance() does not map them on its own - this filter, which
+ * that function calls as `cpwp_block_instance`, is what bridges the gap.
+ *
+ * @param array $instance   The widget instance data built so far.
+ * @param array $attributes The raw block attributes.
+ *
+ * @return array The widget instance data, with this add-on's settings added.
+ *
+ * @since 1.3.0
+ */
+function cpwp_block_instance( $instance, $attributes ) {
+
+	$instance['title_links']               = isset( $attributes['titleLinks'] ) ? $attributes['titleLinks'] : 'default_links';
+	$instance['search_engine_attribute']    = isset( $attributes['searchEngineAttribute'] ) ? $attributes['searchEngineAttribute'] : 'none';
+	$instance['thumbnail_attribute_alt']    = isset( $attributes['thumbnailAttributeAlt'] ) ? $attributes['thumbnailAttributeAlt'] : false;
+	$instance['thumbnail_attribute_title']  = isset( $attributes['thumbnailAttributeTitle'] ) ? $attributes['thumbnailAttributeTitle'] : false;
+
+	return $instance;
+}
+
+add_filter( 'cpwp_block_instance', __NAMESPACE__ . '\cpwp_block_instance', 10, 2 );
 
 // Plugin action links section
 

@@ -63,6 +63,9 @@ The premium widget [Term and Category Based Posts Widget](http://tiptoppress.com
 
 == Changelog ==
 
+= 1.3.0 =
+* Add support for the Term and Category based Posts block (Gutenberg): the "SEO and Links Add-on" panel now also appears in the block's Inspector Controls, with the same title-link, SEO-friendly-URL and thumbnail-attribute options as the classic widget form.
+
 = 1.2.0 - August 11 2020 =
 * Add option add custom fields to attachments
 
